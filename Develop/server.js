@@ -2,11 +2,17 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 
-const PORT = process.env.PORT || 3000;
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+const PORT = process.env.PORT || 3000;
+
+
 
 app.use(express.static(path.join('public')));
+app.use(express.json());
+
 
 // GET Route for homepage
 app.get('/', (req, res) => 
@@ -18,8 +24,27 @@ app.get('/notes', (req, res) => {
 });
 
 app.get('/api/notes', (req, res) => {
-    const db = require('./db/db.json');
-    res.status(200).json(db);
+    fs.readFile('db/db.json', 'utf-8', (err, data) => {
+        if(err) throw new Error(err);
+        res.json(JSON.parse(data));
+    })
+});
+
+app.post('/api/notes', (req, res) => {
+    const note = req.body;
+    note.id = uuidv4();
+
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if(err) throw new Error(err);
+
+        const notes = JSON.parse(data);
+        notes.push(note);
+
+        fs.writeFile('db/db.json', JSON.stringify(notes), (err) => {
+            if (err) throw new Error(err);
+            res.json(note);
+        });
+    });
 });
 
 app.listen(PORT, () => console.log(`App listening on ${PORT}`));
