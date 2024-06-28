@@ -5,6 +5,7 @@ let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
+// Check if the current URL path is '/notes'
 if (window.location.pathname === '/notes') {
   noteForm = document.querySelector('.note-form');
   noteTitle = document.querySelector('.note-title');
