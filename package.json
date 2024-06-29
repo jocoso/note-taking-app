@@ -4,7 +4,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "build": "echo 'No build step defined' && exit 0",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d public"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +17,8 @@
     "uuid": "^10.0.0"
   },
   "keywords": [],
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
+  }
 }
